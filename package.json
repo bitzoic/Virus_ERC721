@@ -1,0 +1,22 @@
+{
+  "name": "covid19_erc721",
+  "version": "1.0.0",
+  "description": "Covid-19 replicates itself with infected NFTs! Get vaccinated to stop the spread",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitzoic/Covid19_ERC721.git"
+  },
+  "author": "bitzoic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bitzoic/Covid19_ERC721/issues"
+  },
+  "homepage": "https://github.com/bitzoic/Covid19_ERC721#readme",
+  "devDependencies": {
+    "hardhat": "^2.8.3"
+  }
+}
