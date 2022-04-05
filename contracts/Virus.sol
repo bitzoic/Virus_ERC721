@@ -1,17 +1,15 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/math/SafeCast.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Covid {
+contract Virus {
     
     using SafeCast for uint256;
-    using SafeMath for uint256;
 
-    event NewCovidVariant(uint16 rna);
+    event NewVirusVariant(uint16 rna);
 
     uint rna_digits = 16;
-    uint max_variants = SafeMath.mod(2, rna_digits);
+    uint max_variants = rna_digits % 2;
 
     struct Variant {
         uint16 rna;
@@ -24,7 +22,7 @@ contract Covid {
         uint16 rna = _randomVariantRNA();
         variants.push(Variant(rna));
         uint varId = variants.length;
-        varId = varId.sub(1); 
+        varId -= 1; 
         return varId.toUint16();
     }
 
@@ -32,7 +30,7 @@ contract Covid {
         // Todo: Returns random uint16 value
     }
 
-    function covidVariantExists() private view returns (bool) {
+    function virusVariantExists() private view returns (bool) {
         return variants.length > 0;
     }
 }

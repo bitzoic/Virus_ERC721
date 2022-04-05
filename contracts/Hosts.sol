@@ -1,14 +1,10 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/math/SafeCast.sol";
 
 contract Hosts is Ownable {
 
-    using SafeMath for uint256;
-    using SafeMath for uint32;
-    using SafeMath for uint16;
     using SafeCast for uint32;
 
     uint mRNA_digits = 16;
@@ -34,9 +30,9 @@ contract Hosts is Ownable {
     function _createHost() internal {
         hosts.push(Host(0, 0, 0, false, false, false));
         uint host_length = hosts.length;
-        host_length.sub(1);
+        host_length -= 1;
         hostToOwner[host_length] = msg.sender;
-        ownerHostCount[msg.sender] = ownerHostCount[msg.sender].add(1);
+        ownerHostCount[msg.sender] = ownerHostCount[msg.sender] + 1;
         emit NewHost(host_length);
     } 
 

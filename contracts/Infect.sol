@@ -1,9 +1,9 @@
 pragma solidity ^0.8.0;
 
 import "./Hosts.sol";
-import "./Covid.sol";
+import "./Virus.sol";
 
-contract Infect is Hosts, Covid {
+contract Infect is Hosts, Virus {
 
     uint infectChance = 80;
 
