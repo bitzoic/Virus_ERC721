@@ -7,6 +7,8 @@ contract Infect is Hosts, Virus {
 
     uint infectChance = 80;
 
+    event HostInfected(uint256 hostId, uint16 variantId);
+
     modifier onlyOwnerOfHost(uint _hostId) {
         require(msg.sender == hostToOwner[_hostId]);
         _;
@@ -24,29 +26,38 @@ contract Infect is Hosts, Virus {
 
         if (randChance <= infectChance)
         {
-            if (hostA.vaccinated) 
-            { 
-                _vaxInfectChance(hostA, hostB);
-            }
-            else
+            // Both hosts are infected
+            if (hostA.infected == true && hostB.infected == true)
             {
-                _noVaxInfectChance(hostA, hostB);
+                _infectBoth(hostA, hostB);
+            }
+            else if (hostA.infected == true)
+            {
+                _infectOne(hostA, hostB, _hostA);
+            }
+            else if (hostB.infected == true)
+            {
+                _infectOne(hostB, hostA, _hostB);
             }
         }
     }
 
-    function _noVaxInfectChance(
+    function _infectBoth(
         Host storage _hostA, 
         Host storage _hostB) 
         internal {
-            
+        // TODO: Mutate the virus
     }
 
-    function _vaxInfectChance(
+    function _infectOne(
         Host storage _hostA, 
-        Host storage _hostB) 
+        Host storage _hostB,
+        uint256 hostId) 
         internal {
-            
+        // Infect hostA
+        _hostA.infected = true;
+        _hostA.variantId = _hostB.variantId;
+        emit HostInfected(hostId, _hostA.variantId);
     }
 
     function _randomInfectChance() internal returns (uint) {
