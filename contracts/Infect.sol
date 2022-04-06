@@ -9,7 +9,7 @@ contract Infect is Hosts, Virus, Mask {
 
     using SafeCast for uint256;
 
-    uint infectChance = 80;
+    uint baseInfectChance;
 
     event HostInfected(uint256 hostId, uint256 variantId);
 
@@ -21,9 +21,9 @@ contract Infect is Hosts, Virus, Mask {
         require(hostA.infected == true || hostB.infected == true);
 
         // Determine to infect
-        uint randChance = _randomInfectChance();
+        uint randChance = _randombaseInfectChance();
 
-        if (randChance <= infectChance)
+        if (randChance <= baseInfectChance)
         {
             // Both hosts are infected
             if (hostA.infected == true && hostB.infected == true)
@@ -62,7 +62,11 @@ contract Infect is Hosts, Virus, Mask {
         emit HostInfected(hostId, _hostA.variantId);
     }
 
-    function _randomInfectChance() internal returns (uint) {
+    function _randombaseInfectChance() internal returns (uint) {
         // TODO: random chance function
+    }
+
+    function setBasebaseInfectChance(uint256 _chance) public onlyOwner {
+        baseInfectChance = _chance;
     }
 }
