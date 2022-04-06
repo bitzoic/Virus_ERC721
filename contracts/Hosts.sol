@@ -22,6 +22,11 @@ contract Hosts is Ownable {
         bool masked;
     }
 
+    modifier onlyOwnerOfHost(uint _hostId) {
+        require(msg.sender == hostToOwner[_hostId]);
+        _;
+    }
+
     Host[] public hosts;
 
     mapping (uint => address) hostToOwner;
