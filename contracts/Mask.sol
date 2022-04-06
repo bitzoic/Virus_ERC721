@@ -23,7 +23,7 @@ contract Mask is Hosts {
         emit HostRemovedMask(_hostId);
     }
 
-    function setMaskInfectChance(uint256 chance) public onlyOwner 
+    function setMaskInfectChance(uint256 chance) external onlyOwner 
     {
         maskInfectChance = chance;
     }
