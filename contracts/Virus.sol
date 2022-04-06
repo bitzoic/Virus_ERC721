@@ -6,7 +6,7 @@ contract Virus {
     
     using SafeCast for uint256;
 
-    event NewVirusVariant(uint16 rna);
+    event NewVirusVariant(uint256 rna);
 
     uint rna_digits = 16;
     uint max_variants = rna_digits % 2;
@@ -17,13 +17,17 @@ contract Virus {
 
     Variant[] public variants;
 
-    function createVariant() private returns (uint16 id) {
+    function createVariant() private returns (uint256 id) {
         require(variants.length < max_variants);
+
         uint16 rna = _randomVariantRNA();
         variants.push(Variant(rna));
+
         uint varId = variants.length;
         varId -= 1; 
-        return varId.toUint16();
+        emit NewVirusVariant(varId);
+        
+        return varId;
     }
 
     function _randomVariantRNA() internal returns (uint16 rna) {

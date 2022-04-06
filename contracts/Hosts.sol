@@ -16,7 +16,7 @@ contract Hosts is Ownable {
     struct Host {
         uint32 infectedTime;
         uint16 vaxRNA;
-        uint16 variantId;
+        uint256 variantId;
         bool infected;
         bool vaccinated;
         bool masked;
