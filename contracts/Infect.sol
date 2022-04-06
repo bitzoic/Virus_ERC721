@@ -2,12 +2,15 @@ pragma solidity ^0.8.0;
 
 import "./Hosts.sol";
 import "./Virus.sol";
+import "@openzeppelin/contracts/utils/math/SafeCast.sol";
 
 contract Infect is Hosts, Virus {
 
+    using SafeCast for uint256;
+
     uint infectChance = 80;
 
-    event HostInfected(uint256 hostId, uint16 variantId);
+    event HostInfected(uint256 hostId, uint256 variantId);
 
     modifier onlyOwnerOfHost(uint _hostId) {
         require(msg.sender == hostToOwner[_hostId]);
@@ -46,7 +49,17 @@ contract Infect is Hosts, Virus {
         Host storage _hostA, 
         Host storage _hostB) 
         internal {
-        // TODO: Mutate the virus
+        Variant storage variantA = variants[_hostA.variantId];
+        Variant storage variantB = variants[_hostB.variantId];
+        
+        // Mutate new virus
+        uint256 newRna256 = (variantA.rna + variantB.rna) % rna_digits;
+        uint16 newRna = newRna256.toUint16();
+        variants.push(Variant(newRna));
+        
+        uint256 varId = variants.length - 1;
+        _hostA.variantId = varId;
+        _hostB.variantId = varId;
     }
 
     function _infectOne(
