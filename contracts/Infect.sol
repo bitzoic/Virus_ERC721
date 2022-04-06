@@ -13,7 +13,7 @@ contract Infect is Hosts, Virus, Mask {
 
     event HostInfected(uint256 hostId, uint256 variantId);
 
-    function infectHost(uint _hostA, uint _hostB) public onlyOwnerOfHost(_hostA) {
+    function infectHost(uint256 _hostA, uint256 _hostB) public onlyOwnerOfHost(_hostA) {
         Host storage hostA = hosts[_hostA];
         Host storage hostB = hosts[_hostB];
 
@@ -21,9 +21,10 @@ contract Infect is Hosts, Virus, Mask {
         require(hostA.infected == true || hostB.infected == true);
 
         // Determine to infect
-        uint randChance = _randombaseInfectChance();
+        uint256 randChance = _randombaseInfectChance();
+        uint256 infectChance = getInfectChance(hostA, hostB);
 
-        if (randChance <= baseInfectChance)
+        if (randChance <= infectChance)
         {
             // Both hosts are infected
             if (hostA.infected == true && hostB.infected == true)
@@ -62,11 +63,37 @@ contract Infect is Hosts, Virus, Mask {
         emit HostInfected(hostId, _hostA.variantId);
     }
 
-    function _randombaseInfectChance() internal returns (uint) {
+    function _randombaseInfectChance() internal returns (uint256) {
         // TODO: random chance function
     }
 
     function setBasebaseInfectChance(uint256 _chance) public onlyOwner {
         baseInfectChance = _chance;
+    }
+
+    function getInfectChance(Host storage _hostA, Host storage _hostB) private view returns (uint256) {
+        uint256 infectChance = baseInfectChance;
+        
+        // Masks
+        if (_hostA.masked)
+        {
+            infectChance -= maskInfectChance;
+        }
+        if (_hostB.masked)
+        {
+            infectChance -= maskInfectChance;
+        }
+
+        // Vaxinated
+        if (_hostA.vaccinated)
+        {
+            // TODO: Remove vax infect chance for hostA
+        }
+        if (_hostB.vaccinated)
+        {
+            // TODO: Remove vax infect chance for hostB
+        }
+
+        return infectChance;
     }
 }

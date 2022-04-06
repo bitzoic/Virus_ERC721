@@ -8,8 +8,8 @@ contract Virus {
 
     event NewVirusVariant(uint256 rna);
 
-    uint rna_digits = 16;
-    uint max_variants = rna_digits % 2;
+    uint256 rna_digits = 16;
+    uint256 max_variants = rna_digits % 2;
 
     struct Variant {
         uint16 rna;

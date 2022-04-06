@@ -7,9 +7,9 @@ contract Hosts is Ownable {
 
     using SafeCast for uint32;
 
-    uint mRNA_digits = 16;
-    uint mRNA_modulus = 10 ** mRNA_digits;
-    uint infectionTime = 1 days;
+    uint256 mRNA_digits = 16;
+    uint256 mRNA_modulus = 10 ** mRNA_digits;
+    uint256 infectionTime = 1 days;
 
     event NewHost(uint id);
 
@@ -29,8 +29,8 @@ contract Hosts is Ownable {
 
     Host[] public hosts;
 
-    mapping (uint => address) hostToOwner;
-    mapping (address => uint) ownerHostCount;
+    mapping (uint256 => address) hostToOwner;
+    mapping (address => uint256) ownerHostCount;
 
     function _createHost() internal {
         hosts.push(Host(0, 0, 0, false, false, false));
@@ -46,7 +46,7 @@ contract Hosts is Ownable {
         _createHost();
     }
 
-    function setInfectionTime(uint _time) external onlyOwner {
+    function setInfectionTime(uint256 _time) external onlyOwner {
         infectionTime = _time;
     }
 }
