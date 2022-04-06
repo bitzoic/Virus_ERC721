@@ -3,9 +3,10 @@ pragma solidity ^0.8.0;
 import "./Hosts.sol";
 import "./Virus.sol";
 import "./Mask.sol";
+import "./Vaccine.sol";
 import "@openzeppelin/contracts/utils/math/SafeCast.sol";
 
-contract Infect is Hosts, Virus, Mask {
+contract Infect is Hosts, Virus, Mask, Vaccine {
 
     using SafeCast for uint256;
 
