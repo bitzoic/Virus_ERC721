@@ -6,6 +6,8 @@ contract Vaccine is Hosts {
 
     event HostGotVaccine(uint256 hostId);
 
+    uint256 vaccineInfectChance;
+
     function getVaccine(uint256 _hostId) public onlyOwnerOfHost(_hostId)
     {
         Host storage host = hosts[_hostId];
@@ -13,7 +15,13 @@ contract Vaccine is Hosts {
         host.vaccinated = true;
     }
 
-    function _randomRNA() internal returns (uint16) {
+    function _randomRNA() internal returns (uint16) 
+    {
         // TODO: random function
+    }
+
+    function setVaccineInfectChance(uint256 chance) external onlyOwner 
+    {
+        vaccineInfectChance = chance;
     }
 }

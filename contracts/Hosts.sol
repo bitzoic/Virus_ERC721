@@ -13,7 +13,8 @@ contract Hosts is Ownable {
 
     event NewHost(uint id);
 
-    struct Host {
+    struct Host 
+    {
         uint32 infectedTime;
         uint16 vaxRNA;
         uint256 variantId;
@@ -22,7 +23,8 @@ contract Hosts is Ownable {
         bool masked;
     }
 
-    modifier onlyOwnerOfHost(uint _hostId) {
+    modifier onlyOwnerOfHost(uint _hostId) 
+    {
         require(msg.sender == hostToOwner[_hostId]);
         _;
     }
@@ -32,7 +34,8 @@ contract Hosts is Ownable {
     mapping (uint256 => address) hostToOwner;
     mapping (address => uint256) ownerHostCount;
 
-    function _createHost() internal {
+    function _createHost() internal 
+    {
         hosts.push(Host(0, 0, 0, false, false, false));
         uint host_length = hosts.length;
         host_length -= 1;
@@ -41,12 +44,14 @@ contract Hosts is Ownable {
         emit NewHost(host_length);
     } 
 
-    function createRandomHost() public {
+    function createRandomHost() public 
+    {
         require(ownerHostCount[msg.sender] == 0);
         _createHost();
     }
 
-    function setInfectionTime(uint256 _time) external onlyOwner {
+    function setInfectionTime(uint256 _time) external onlyOwner 
+    {
         infectionTime = _time;
     }
 }
