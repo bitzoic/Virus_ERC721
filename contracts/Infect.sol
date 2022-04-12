@@ -14,7 +14,8 @@ contract Infect is Hosts, Virus, Mask, Vaccine {
 
     event HostInfected(uint256 hostId, uint256 variantId);
 
-    function infectHost(uint256 _hostA, uint256 _hostB) public onlyOwnerOfHost(_hostA) {
+    function infectHost(uint256 _hostA, uint256 _hostB) public onlyOwnerOfHost(_hostA) 
+    {
         Host storage hostA = hosts[_hostA];
         Host storage hostB = hosts[_hostB];
 
@@ -43,7 +44,8 @@ contract Infect is Hosts, Virus, Mask, Vaccine {
         }
     }
 
-    function _infectBoth(Host storage _hostA, Host storage _hostB) internal {
+    function _infectBoth(Host storage _hostA, Host storage _hostB) internal 
+    {
         Variant storage variantA = variants[_hostA.variantId];
         Variant storage variantB = variants[_hostB.variantId];
         
@@ -57,7 +59,8 @@ contract Infect is Hosts, Virus, Mask, Vaccine {
         _hostB.variantId = varId;
     }
 
-    function _infectOne(Host storage _hostA, Host storage _hostB, uint256 hostId) internal {
+    function _infectOne(Host storage _hostA, Host storage _hostB, uint256 hostId) internal 
+    {
         // Infect hostA
         _hostA.infected = true;
         _hostA.variantId = _hostB.variantId;
@@ -68,14 +71,16 @@ contract Infect is Hosts, Virus, Mask, Vaccine {
         // TODO: random chance function
     }
 
-    function setBasebaseInfectChance(uint256 _chance) public onlyOwner {
+    function setBasebaseInfectChance(uint256 _chance) external onlyOwner 
+    {
         baseInfectChance = _chance;
     }
 
-    function getInfectChance(Host storage _hostA, Host storage _hostB) private view returns (uint256) {
+    function getInfectChance(Host storage _hostA, Host storage _hostB) private view returns (uint256) 
+    {
         uint256 infectChance = baseInfectChance;
         
-        // Masks
+        // Masks reduce chance of getting infected
         if (_hostA.masked)
         {
             infectChance -= maskInfectChance;
@@ -86,13 +91,38 @@ contract Infect is Hosts, Virus, Mask, Vaccine {
         }
 
         // Vaxinated
-        if (_hostA.vaccinated)
+        if (_hostA.vaccinated && _hostB.infected)
         {
-            // TODO: Remove vax infect chance for hostA
+            Variant memory variant = variants[_hostA.variantId];
+
+            // The goal is to get a larger vax rna than the variant rna, then they are protected
+            if (variant.rna - _hostA.vaxRNA == 0)
+            {
+                infectChance = 0;
+            }
+            else
+            {
+                // Reduced chance of infection but still can be infected
+                infectChance -= vaccineInfectChance;
+            }
         }
-        if (_hostB.vaccinated)
+
+        // Note if and not else if. If both are infected and both are vaccinated then
+        // the infect chance is reduced twice
+        if (_hostB.vaccinated && _hostA.infected)
         {
-            // TODO: Remove vax infect chance for hostB
+            Variant memory variant = variants[_hostB.variantId];
+
+            // The goal is to get a larger vax rna than the variant rna, then they are protected
+            if (variant.rna - _hostB.vaxRNA == 0)
+            {
+                infectChance = 0;
+            }
+            else
+            {
+                // Reduced chance of infection but still can be infected
+                infectChance -= vaccineInfectChance;
+            }
         }
 
         return infectChance;
