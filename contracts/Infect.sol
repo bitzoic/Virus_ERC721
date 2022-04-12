@@ -57,6 +57,15 @@ contract Infect is Hosts, Virus, Mask, Vaccine {
         uint256 varId = variants.length - 1;
         _hostA.variantId = varId;
         _hostB.variantId = varId;
+
+        if (_hostA.vaccinated)
+        {
+            _increaseVaccineEffectiveness(_hostA, _hostB);
+        }
+        if (_hostB.vaccinated)
+        {
+            _increaseVaccineEffectiveness(_hostB, _hostA);
+        }
     }
 
     function _infectOne(Host storage _hostA, Host storage _hostB, uint256 hostId) internal 
@@ -65,6 +74,11 @@ contract Infect is Hosts, Virus, Mask, Vaccine {
         _hostA.infected = true;
         _hostA.variantId = _hostB.variantId;
         emit HostInfected(hostId, _hostA.variantId);
+
+        if (_hostA.vaccinated)
+        {
+            _increaseVaccineEffectiveness(_hostA, _hostB);
+        }
     }
 
     function _randombaseInfectChance() internal returns (uint256) {

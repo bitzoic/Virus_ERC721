@@ -2,7 +2,7 @@ pragma solidity ^0.8.0;
 
 import "./Hosts.sol";
 
-contract Vaccine is Hosts {
+contract Vaccine is Hosts, Virus {
 
     event HostGotVaccine(uint256 hostId);
 
@@ -23,5 +23,12 @@ contract Vaccine is Hosts {
     function setVaccineInfectChance(uint256 chance) external onlyOwner 
     {
         vaccineInfectChance = chance;
+    }
+
+    function _increaseVaccineEffectiveness(Host storage _hostA, Host storage _hostB) private 
+    {
+        Variant memory variant = variants[_hostB.variantId];
+
+        _hostA.vaxRNA = variant.rna;
     }
 }
